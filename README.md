@@ -1,2 +1,2 @@
 # sjasgo
-personal lib for stuff often needed
+personal lib for stuff often need
