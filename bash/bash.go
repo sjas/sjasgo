@@ -9,7 +9,8 @@ import (
 )
 
 // SCRIPTENV env var is used in local .bashrc to exclude the interactive session contents
-// a plain .bashrc will not run
+// bashrc is loaded as all aliases and functions are sources from there, so i get the proper environment
+// a plain .bashrc will not run with the aliases loaded as it exits upon $- not being marked interactive
 const (
         SCRIPTENVFLAG=`SCRIPTENV="1"`
         SHELLEXECUTABLE=`/bin/bash`
