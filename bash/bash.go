@@ -8,6 +8,8 @@ import (
 	"github.com/gookit/color"
 )
 
+// SCRIPTENV env var is used in local .bashrc to exclude the interactive session contents
+// a plain .bashrc will not run
 const (
         SCRIPTENVFLAG=`SCRIPTENV="1"`
         SHELLEXECUTABLE=`/bin/bash`
