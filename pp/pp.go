@@ -18,12 +18,13 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	prettyPrint:=color.New(color.OpBold,colorfg,colorbg)
 	inputStringLength:=len(inputString)
 	terminalWidth,_,err:=term.GetSize(int(os.Stdout.Fd()));if err!=nil{l.Fatal(err)}
+	res:=""
 	if maxCharPosition<=terminalWidth && maxCharPosition>(inputStringLength+1){
-		res:=inputString+" "
+		res=inputString+" "
 		res+=strings.Repeat(fillChar,maxCharPosition-len(inputString)-1)
 	} else
 	if maxCharPosition>terminalWidth&&maxCharPosition>(inputStringLength+1){
-		res:=inputString+" "
+		res=inputString+" "
 		res+=strings.Repeat(fillChar,terminalWidth-len(inputString)-1)
 	}
 	prettyPrint.Println(res)

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/gookit/color"
 )
@@ -18,7 +19,7 @@ const (
         SHELLFLAGS=`-c`
 )
 
-func Cmd(shellcommand string)string{
+func CmdToString(shellcommand string)string{
         cmd:=exec.Command(SHELLEXECUTABLE,SHELLFLAGS,"{ source ~/.bashrc;"+shellcommand+";}",)
         cmd.Env=append(os.Environ(),SCRIPTENVFLAG)
         //cmd.Env=append(os.Environ(),"BASH_ENV="+os.Getenv("HOME")+"/.bashrc")
@@ -31,4 +32,19 @@ func Cmd(shellcommand string)string{
         errcolor:=color.New(color.OpBold,color.FgYellow,color.BgBlack)
         if err!=nil{errcolor.Println(err)}
         return stdout.String()
+}
+
+func CmdToStringSlice(shellcommand string)[]string{
+	res_string:=CmdToString(shellcommand)
+	res:=strings.Split(res_string,"\n")
+ 	return res
+}
+
+func CmdToStringSliceWithCall(shellcommand string)[]string{
+	prompt:=CmdToString(`echo $USER@$(hostname):$(pwd) $(if [[ $UID -eq 0 ]];then echo "#";else echo "$";fi)`)
+	res_string:=prompt+shellcommand+"\n\n"
+	res_string+=CmdToString(shellcommand)+"\n"+prompt
+	temp:=strings.Split(res_string,"\n")
+ 	res:=temp[:len(temp)-1]
+ 	return res
 }
