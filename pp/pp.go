@@ -64,6 +64,6 @@ ppss() { pph '+' 50 '33' "$*";}
 */
 
 func Long(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,input...)}
-func Shortred(input ...string){pph("+",color.FgWhite,color.BgRed,55,input...)}
-func Shortyellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,input...)}
-func Shortgreen(input ...string){pph("+",color.FgWhite,color.BgGreen,55,input...)}
+func ShortRed(input ...string){pph("+",color.FgWhite,color.BgRed,55,input...)}
+func ShortYellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,input...)}
+func ShortGreen(input ...string){pph("+",color.FgWhite,color.BgGreen,55,input...)}
