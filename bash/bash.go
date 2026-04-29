@@ -37,7 +37,7 @@ func CmdToString(shellcommand string)string{
 func CmdToStringSlice(shellcommand string)[]string{
 	res_string:=CmdToString(shellcommand)
 	res:=strings.Split(res_string,"\n")
- 	return res
+	return res[:len(res)-1]
 }
 
 func CmdToStringSliceWithCall(shellcommand string)[]string{
