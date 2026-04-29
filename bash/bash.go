@@ -37,7 +37,9 @@ func CmdToString(shellcommand string)string{
 func CmdToStringSlice(shellcommand string)[]string{
 	res_string:=CmdToString(shellcommand)
 	res:=strings.Split(res_string,"\n")
-	return res[:len(res)-1]
+	//drop last element if empty. probably only needed because i use a newline via $PROMPT_COMMAND
+	if len(res[len(res)-1])==0{res=res[:len(res)-1]}
+	return res
 }
 
 func CmdToStringSliceWithCall(shellcommand string)[]string{
