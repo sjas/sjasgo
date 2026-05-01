@@ -11,14 +11,14 @@ import (
 func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
     user:=bash.CmdToStringWithoutFullEnvironment("getuser .aduser")
 	pass:=bash.CmdToStringWithoutFullEnvironment("getpass .adpass")
-	var osVersion string
+	var osType string
 	if mdcliEnabled{
-		osVersion="nokia_sros"
+		osType="nokia_sros"
 	}else{
-		osVersion="nokia_sros_classic"
+		osType="nokia_sros_classic"
 	}
     p,err:=platform.NewPlatform(
-        osVersion,
+        osType,
         host,
         options.WithAuthNoStrictKey(),
         options.WithAuthUsername(user),
@@ -34,7 +34,7 @@ func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
     res_bytes,err:=d.Channel.SendInput(cmd)
     if err!=nil{l.Fatal(err)}
     res:=string(res_bytes)
-	l.Info("ran commmand "+cmd+" on host "+host)
+	l.Debug("ran commmand "+cmd+" on host "+host)
     l.Debug(res)
 	return res
 }
