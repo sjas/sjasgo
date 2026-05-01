@@ -1,14 +1,19 @@
 package main
 
 import (
-//	"fmt"
+//  "fmt"
+// 	l "github.com/sirupsen/logrus"
 //	"github.com/sjas/sjasgo/bash"
 //	"github.com/sjas/sjasgo/pp"
+//  "github.com/sjas/sjasgo/nokia"
 //	"strconv"
 //	"time"
 )
 
 func main(){
+// 	l.SetReportCaller(true)
+// 	l.SetLevel(l.DebugLevel)
+
 // 	pp.Long("date test")
 //	pp.LongNoDate("nodate test")
 //	pp.ShortRed("red")

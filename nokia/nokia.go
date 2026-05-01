@@ -1,6 +1,7 @@
 package nokia
 
 import (
+	"strings"
 	l "github.com/sirupsen/logrus"
 	"github.com/sjas/sjasgo/bash"
 	"github.com/scrapli/scrapligo/driver/options"
@@ -9,14 +10,17 @@ import (
 )
 
 func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
-    user:=bash.CmdToStringWithoutFullEnvironment("getuser .aduser")
-	pass:=bash.CmdToStringWithoutFullEnvironment("getpass .adpass")
+    user:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .aduser"))
+	pass:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .adpass"))
+	l.Debug(user)
+	l.Debug(pass)
 	var osType string
 	if mdcliEnabled{
 		osType="nokia_sros"
 	}else{
 		osType="nokia_sros_classic"
 	}
+	l.Info(osType)
     p,err:=platform.NewPlatform(
         osType,
         host,
