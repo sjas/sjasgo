@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
-	"fmt"
 )
 
 // SCRIPTENV env var is used in local .bashrc to exclude the interactive session contents
@@ -26,7 +25,6 @@ func cmdToStringWrapper(shellcommand string, fullEnvironment bool)string{
 		}else{
 			cmd=exec.Command(SHELLEXECUTABLE,SHELLFLAGS,shellcommand)
 		}
-		fmt.Printf("%T\n",cmd)
         cmd.Env=append(os.Environ(),SCRIPTENVFLAG)
         //cmd.Env=append(os.Environ(),"BASH_ENV="+os.Getenv("HOME")+"/.bashrc")
         var stdout,stderr bytes.Buffer
