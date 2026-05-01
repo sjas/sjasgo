@@ -2,25 +2,20 @@ package nokia
 
 import (
 	"strings"
-	l "github.com/sirupsen/logrus"
 	"github.com/sjas/sjasgo/bash"
 	"github.com/scrapli/scrapligo/driver/options"
     "github.com/scrapli/scrapligo/platform"
-
 )
 
 func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
     user:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .aduser"))
 	pass:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .adpass"))
-	l.Debug(user)
-	l.Debug(pass)
 	var osType string
 	if mdcliEnabled{
 		osType="nokia_sros"
 	}else{
 		osType="nokia_sros_classic"
 	}
-	l.Info(osType)
     p,err:=platform.NewPlatform(
         osType,
         host,
@@ -28,18 +23,15 @@ func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
         options.WithAuthUsername(user),
         options.WithAuthPassword(pass),
         options.WithTransportType("system"),
-    );if err!=nil{l.Fatal(err)}
-    d,err:=p.GetNetworkDriver();if err!=nil{l.Fatal(err)}
-    err=d.Open();if err!=nil{l.Error(err)}
+    );if err!=nil{panic(err)}
+    d,err:=p.GetNetworkDriver();if err!=nil{panic(err)}
+    err=d.Open();if err!=nil{panic(err)}
     defer d.Close()
-    prompt,err:=d.Channel.GetPrompt();if err!=nil{l.Fatal(err)}
-    l.Info("found prompt: ",string(prompt))
+    _,err=d.Channel.GetPrompt();if err!=nil{panic(err)}
 
     res_bytes,err:=d.Channel.SendInput(cmd)
-    if err!=nil{l.Fatal(err)}
+    if err!=nil{panic(err)}
     res:=string(res_bytes)
-	l.Debug("ran commmand "+cmd+" on host "+host)
-    l.Debug(res)
 	return res
 }
 

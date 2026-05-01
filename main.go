@@ -36,4 +36,5 @@ func main(){
 //	pp.ShortRed("delim")
 //	for idx,i:=range(bash.CmdToStringSlice("ls -lisha")){fmt.Println(strconv.Itoa(idx)+": "+i)}
 //	for idx,i:=range(bash.CmdToStringSliceWithCall("ls -lisha")){fmt.Println(strconv.Itoa(idx)+": "+i)}
+
 }
