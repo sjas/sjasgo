@@ -5,6 +5,7 @@ import (
 //	"github.com/sjas/sjasgo/bash"
 //	"github.com/sjas/sjasgo/pp"
 //	"strconv"
+//	"time"
 )
 
 func main(){
@@ -13,7 +14,16 @@ func main(){
 //	pp.ShortRed("red")
 //	pp.ShortYellow("yellow")
 //	pp.ShortGreen("green")
-//	fmt.Println(bash.CmdToString("hostname -f"))
+
+// 	start:=time.Now()
+// 	fmt.Println(bash.CmdToString("hostname -f"))
+// 	end:=time.Now()
+// 	fmt.Println(end.Sub(start))
+// 	start=time.Now()
+// 	fmt.Println(bash.CmdToStringWithoutFullEnvironment("hostname -f"))
+// 	end=time.Now()
+// 	fmt.Println(end.Sub(start))
+
 //	fmt.Println(bash.CmdToString("cat /etc/hosts"))
 //	for _,i:=range(bash.CmdToStringSlice("ls -alh")){fmt.Println(i)}
 //	for _,i:=range(bash.CmdToStringSliceWithCall("ls -alh")){fmt.Println(i)}

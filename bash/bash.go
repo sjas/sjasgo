@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/gookit/color"
+	"fmt"
 )
 
 // SCRIPTENV env var is used in local .bashrc to exclude the interactive session contents
@@ -18,9 +19,14 @@ const (
         //SHELLFLAGS=`-xc`
         SHELLFLAGS=`-c`
 )
-
-func CmdToString(shellcommand string)string{
-        cmd:=exec.Command(SHELLEXECUTABLE,SHELLFLAGS,"{ source ~/.bashrc;"+shellcommand+";}",)
+func cmdToStringWrapper(shellcommand string, fullEnvironment bool)string{
+		var cmd *exec.Cmd
+		if fullEnvironment{
+			cmd=exec.Command(SHELLEXECUTABLE,SHELLFLAGS,"{ source ~/.bashrc;"+shellcommand+";}")
+		}else{
+			cmd=exec.Command(SHELLEXECUTABLE,SHELLFLAGS,shellcommand)
+		}
+		fmt.Printf("%T\n",cmd)
         cmd.Env=append(os.Environ(),SCRIPTENVFLAG)
         //cmd.Env=append(os.Environ(),"BASH_ENV="+os.Getenv("HOME")+"/.bashrc")
         var stdout,stderr bytes.Buffer
@@ -32,6 +38,14 @@ func CmdToString(shellcommand string)string{
         errcolor:=color.New(color.OpBold,color.FgYellow,color.BgBlack)
         if err!=nil{errcolor.Println(err)}
         return stdout.String()
+}
+
+func CmdToStringWithoutFullEnvironment(shellcommand string)string{
+	return cmdToStringWrapper(shellcommand,false)
+}
+
+func CmdToString(shellcommand string)string{
+	return cmdToStringWrapper(shellcommand,true)
 }
 
 func CmdToStringSlice(shellcommand string)[]string{
