@@ -18,13 +18,12 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	prettyPrint:=color.New(color.OpBold,colorfg,colorbg)
 	inputStringLength:=len(inputString)
 	terminalWidth,_,err:=term.GetSize(int(os.Stdout.Fd()));if err!=nil{l.Fatal(err)}
-	res:=""
+	res:=inputString
+	if len(fillChar)>0{res+=" "}
 	if maxCharPosition<=terminalWidth && maxCharPosition>(inputStringLength+1){
-		res=inputString+" "
 		res+=strings.Repeat(fillChar,maxCharPosition-len(inputString)-1)
 	} else
 	if maxCharPosition>terminalWidth&&maxCharPosition>(inputStringLength+1){
-		res=inputString+" "
 		res+=strings.Repeat(fillChar,terminalWidth-len(inputString)-1)
 	}
 	prettyPrint.Println(res)
@@ -35,3 +34,6 @@ func LongNoDate(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109
 func ShortRed(input ...string){pph("+",color.FgWhite,color.BgRed,55,false,input...)}
 func ShortYellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,false,input...)}
 func ShortGreen(input ...string){pph("+",color.FgWhite,color.BgGreen,55,false,input...)}
+func Red(input ...string){pph("",color.FgWhite,color.BgRed,55,false,input...)}
+func Yellow(input ...string){pph("",color.FgWhite,color.BgYellow,55,false,input...)}
+func Green(input ...string){pph("",color.FgWhite,color.BgGreen,55,false,input...)}
