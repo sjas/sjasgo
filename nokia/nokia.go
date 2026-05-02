@@ -7,7 +7,7 @@ import (
     "github.com/scrapli/scrapligo/platform"
 )
 
-func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
+func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
     user:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .aduser"))
 	pass:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .adpass"))
 	var osType string
@@ -29,18 +29,23 @@ func runCommandWrapper(host string,cmd string,mdcliEnabled bool)string{
     defer d.Close()
     _,err=d.Channel.GetPrompt();if err!=nil{panic(err)}
 
-    res_bytes,err:=d.Channel.SendInput(cmd)
-    if err!=nil{panic(err)}
-    res:=string(res_bytes)
+	var fullResBytes []byte
+	for _,i:=range cmd{
+		resBytes,err:=d.Channel.SendInput(i);if err!=nil{panic(err)}
+		fullResBytes=append(fullResBytes,resBytes...)
+		fullResBytes=append(fullResBytes,'\n')
+		fullResBytes=append(fullResBytes,'\n')
+	}
+    res:=string(fullResBytes)
 	return res
 }
 
-func Classic(host string,cmd string)string{
+func Classic(host string,cmd ...string)string{
 	mdcliEnabled:=false
-	return runCommandWrapper(host,cmd,mdcliEnabled)
+	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
 
-func Mdcli(host string,cmd string)string{
+func Mdcli(host string,cmd ...string)string{
 	mdcliEnabled:=true
-	return runCommandWrapper(host,cmd,mdcliEnabled)
+	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
