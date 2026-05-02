@@ -26,14 +26,15 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	if maxCharPosition>terminalWidth&&maxCharPosition>(inputStringLength+1){
 		res+=strings.Repeat(fillChar,terminalWidth-len(inputString)-1)
 	}
-	prettyPrint.Println(res)
+	prettyPrint.Print(res)
 }
 
-func Long(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,true,input...)}
-func LongNoDate(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,false,input...)}
-func ShortRed(input ...string){pph("+",color.FgWhite,color.BgRed,55,false,input...)}
-func ShortYellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,false,input...)}
-func ShortGreen(input ...string){pph("+",color.FgWhite,color.BgGreen,55,false,input...)}
+func Long(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,true,input...);fmt.Println()}
+func LongNoDate(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,false,input...);fmt.Println()}
+func ShortRed(input ...string){pph("+",color.FgWhite,color.BgRed,55,false,input...);fmt.Println()}
+func ShortYellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,false,input...);fmt.Println()}
+func ShortGreen(input ...string){pph("+",color.FgWhite,color.BgGreen,55,false,input...);fmt.Println()}
+
 func Red(input ...string){pph("",color.FgWhite,color.BgRed,55,false,input...)}
 func Yellow(input ...string){pph("",color.FgWhite,color.BgYellow,55,false,input...)}
 func Green(input ...string){pph("",color.FgWhite,color.BgGreen,55,false,input...)}
