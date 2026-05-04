@@ -14,6 +14,7 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	args:=make([]any,len(input))
     for i,v:=range input{args[i]=v}
 	inputString:=strings.TrimSpace(fmt.Sprintln(args...))
+	if maxCharPosition>100{inputString="\n"+inputString}
 	if showTime{inputString=inputString+" * "+time.Now().Local().Format(time.RFC3339)}
 	prettyPrint:=color.New(color.OpBold,colorfg,colorbg)
 	inputStringLength:=len(inputString)
