@@ -31,7 +31,7 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 
 func Long(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,true,input...);fmt.Println()}
 func LongGreen(input ...string){pph("*",color.FgLightWhite,color.BgGreen,109,true,input...);fmt.Println()}
-func LongNoDateGreen(input ...string){pph("*",color.FgLightWhite,color.BgGreen,109,true,input...);fmt.Println()}
+func LongNoDateGreen(input ...string){pph("*",color.FgLightWhite,color.BgGreen,109,false,input...);fmt.Println()}
 func LongNoDate(input ...string){pph("*",color.FgLightWhite,color.BgLightRed,109,false,input...);fmt.Println()}
 func ShortRed(input ...string){pph("+",color.FgWhite,color.BgRed,55,false,input...);fmt.Println()}
 func ShortYellow(input ...string){pph("+",color.FgWhite,color.BgYellow,55,false,input...);fmt.Println()}
