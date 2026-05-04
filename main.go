@@ -4,7 +4,7 @@ import (
 // 	"fmt"
 // 	l "github.com/sirupsen/logrus"
 //	"github.com/sjas/sjasgo/bash"
-// 	"github.com/sjas/sjasgo/pp"
+ 	"github.com/sjas/sjasgo/pp"
 // 	"github.com/sjas/sjasgo/nokia"
 //	"strconv"
 //	"time"
@@ -15,7 +15,9 @@ func main(){
 // 	l.SetLevel(l.DebugLevel)
 
 // 	pp.Long("date test")
+ 	pp.LongGreen("date test")
 //	pp.LongNoDate("nodate test")
+	pp.LongNoDateGreen("nodate test")
 //	pp.ShortRed("red")
 //	pp.ShortYellow("yellow")
 //	pp.ShortGreen("green")
