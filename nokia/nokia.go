@@ -1,10 +1,13 @@
 package nokia
 
 import (
+	"maps"
 	"strings"
-	"github.com/sjas/sjasgo/bash"
+	"sync"
+
 	"github.com/scrapli/scrapligo/driver/options"
-    "github.com/scrapli/scrapligo/platform"
+	"github.com/scrapli/scrapligo/platform"
+	"github.com/sjas/sjasgo/bash"
 )
 
 func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
@@ -45,7 +48,25 @@ func Classic(host string,cmd ...string)string{
 	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
 
+func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan map[string]string,cmd ...string){
+	defer wg.Done()
+	res:=make(map[string]string)
+	if mdcliEnabled{res[host]=Mdcli(host,cmd...)
+	}else{res[host]=Classic(host,cmd...)}
+	c<-res
+}
+
 func Mdcli(host string,cmd ...string)string{
 	mdcliEnabled:=true
 	return runCommandWrapper(host,mdcliEnabled,cmd...)
+}
+
+func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)map[string]string{
+	res:=make(map[string]string)
+	var wg sync.WaitGroup
+	c:=make(chan map[string]string)
+	for _,i:=range hostlist{wg.Add(1);runCommandWorker(i,mdcliEnabled,&wg,c,cmd...)}
+	go func(){wg.Wait();close(c)}()
+	for i:=range c{maps.Copy(res,i)}
+	return res
 }
