@@ -2,6 +2,7 @@ package nokia
 
 import (
 	"maps"
+	l "github.com/sirupsen/logrus"
 	"strings"
 	"sync"
 
@@ -45,6 +46,7 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
 
 func Classic(host string,cmd ...string)string{
 	mdcliEnabled:=false
+	l.Debug("classic command on host ",host)
 	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
 
@@ -58,6 +60,7 @@ func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan ma
 
 func Mdcli(host string,cmd ...string)string{
 	mdcliEnabled:=true
+	l.Debug("mdcli command on host ",host)
 	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
 
@@ -65,7 +68,11 @@ func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)map[
 	res:=make(map[string]string)
 	var wg sync.WaitGroup
 	c:=make(chan map[string]string)
-	for _,i:=range hostlist{wg.Add(1);runCommandWorker(i,mdcliEnabled,&wg,c,cmd...)}
+	for _,i:=range hostlist{
+		wg.Add(1)
+		l.Debug("trigger command worker ",i)
+		runCommandWorker(i,mdcliEnabled,&wg,c,cmd...)
+	}
 	go func(){wg.Wait();close(c)}()
 	for i:=range c{maps.Copy(res,i)}
 	return res
