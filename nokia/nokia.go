@@ -75,7 +75,7 @@ func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)map[
 	for _,i:=range hostlist{
 		wg.Add(1)
 		l.Debug("trigger command worker ",i)
-		runCommandWorker(i,mdcliEnabled,&wg,c,cmd...)
+		go runCommandWorker(i,mdcliEnabled,&wg,c,cmd...)
 	}
 	l.Debug("all workers started")
 	go func(){wg.Wait();close(c)}()
