@@ -59,6 +59,7 @@ func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan ma
 	l.Debug("finished worker ",host)
 	c<-res
 	l.Debug("pushed to channel ",host)
+	l.Debug(res)
 }
 
 func Mdcli(host string,cmd ...string)string{
