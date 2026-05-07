@@ -26,7 +26,7 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
         options.WithAuthNoStrictKey(),
         options.WithAuthUsername(user),
         options.WithAuthPassword(pass),
-        options.WithTransportType("system"),
+        options.WithTransportType("standard"),
     );if err!=nil{l.Error(err)}
     d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err)}
     err=d.Open();if err!=nil{l.Error(err)}
