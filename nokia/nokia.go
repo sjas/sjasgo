@@ -53,11 +53,12 @@ func Classic(host string,cmd ...string)string{
 func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan map[string]string,cmd ...string){
 	defer wg.Done()
 	res:=make(map[string]string)
-	l.Debug("started worker")
+	l.Debug("started worker ",host)
 	if mdcliEnabled{res[host]=Mdcli(host,cmd...)
 	}else{res[host]=Classic(host,cmd...)}
-	l.Debug("finished worker")
+	l.Debug("finished worker ",host)
 	c<-res
+	l.Debug("pushed to channel ",host)
 }
 
 func Mdcli(host string,cmd ...string)string{
