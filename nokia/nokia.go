@@ -27,11 +27,11 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
         options.WithAuthUsername(user),
         options.WithAuthPassword(pass),
         options.WithTransportType("system"),
-    );if err!=nil{panic(err)}
-    d,err:=p.GetNetworkDriver();if err!=nil{panic(err)}
+    );if err!=nil{l.Error(err)}
+    d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err)}
     err=d.Open();if err!=nil{l.Error(err)}
     defer d.Close()
-    _,err=d.Channel.GetPrompt();if err!=nil{panic(err)}
+    _,err=d.Channel.GetPrompt();if err!=nil{l.Error(err)}
 
 	var fullResBytes []byte
 	for _,i:=range cmd{
