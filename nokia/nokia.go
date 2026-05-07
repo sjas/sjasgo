@@ -31,7 +31,9 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
     d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err)}
     err=d.Open();if err!=nil{l.Error(err)}
     defer d.Close()
-    _,err=d.Channel.GetPrompt();if err!=nil{l.Error(err)}
+    //_,err=d.Channel.GetPrompt();if err!=nil{l.Error(err)}
+	if mdcliEnabled{_,err=d.Channel.SendInput("environment more false");if err!=nil{l.Error(err)}
+	}else{_,err=d.Channel.SendInput("environment no more");if err!=nil{l.Error(err)}}
 
 	var fullResBytes []byte
 	for _,i:=range cmd{
