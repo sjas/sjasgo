@@ -25,8 +25,8 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
 	baseDir:="/dev/shm/nokialogs"
 	err:=os.MkdirAll(baseDir,0755);if err!=nil{l.Fatal(err)}
 	t:=time.Now().Local()
-	formattedTime:=t.Format("20260530T165510")
-	fileName:=host+formattedTime+".log"
+	formattedTime:=t.Format("20060102T150405")
+	fileName:=host+"-"+formattedTime+".log"
 	filePath:=baseDir+"/"+fileName
 	f,err:=os.OpenFile(filePath,os.O_CREATE|os.O_WRONLY|os.O_APPEND,0644);if err!=nil{l.Fatal(err)}
     p,err:=platform.NewPlatform(
