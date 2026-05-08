@@ -40,7 +40,7 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
         options.WithAuthUsername(user),
         options.WithAuthPassword(pass),
         options.WithTransportType("standard"),
-		options.WithTimeoutOps(60*time.Second),
+		options.WithTimeoutOps(90*time.Second),
 		options.WithChannelLog(f),
     );if err!=nil{l.Error(err);unconnectableNokias[host]=err}
     d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err);unconnectableNokias[host]=err}
