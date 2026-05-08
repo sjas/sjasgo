@@ -13,6 +13,10 @@ import (
 	"github.com/sjas/sjasgo/bash"
 )
 
+var (
+	UnconnectableNokias map[string]error
+)
+
 func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
     user:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .aduser"))
 	pass:=strings.TrimSpace(bash.CmdToStringWithoutFullEnvironment("get .adpass"))
@@ -38,17 +42,17 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
         options.WithTransportType("standard"),
 		options.WithTimeoutOps(30*time.Second),
 		options.WithChannelLog(f),
-    );if err!=nil{l.Error(err)}
-    d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err)}
-    err=d.Open();if err!=nil{l.Error(err)}
+    );if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
+    d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
+    err=d.Open();if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
     defer d.Close()
     //_,err=d.Channel.GetPrompt();if err!=nil{l.Error(err)}
-	if mdcliEnabled{_,err=d.Channel.SendInput("environment more false");if err!=nil{l.Error(err)}
-	}else{_,err=d.Channel.SendInput("environment no more");if err!=nil{l.Error(err)}}
+	if mdcliEnabled{_,err=d.Channel.SendInput("environment more false");if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
+	}else{_,err=d.Channel.SendInput("environment no more");if err!=nil{l.Error(err);UnconnectableNokias[host]=err}}
 
 	var fullResBytes []byte
 	for _,i:=range cmd{
-		resBytes,err:=d.Channel.SendInput(i);if err!=nil{l.Error(err)}
+		resBytes,err:=d.Channel.SendInput(i);if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
 		fullResBytes=append(fullResBytes,resBytes...)
 		fullResBytes=append(fullResBytes,'\n')
 		fullResBytes=append(fullResBytes,'\n')
@@ -71,6 +75,7 @@ func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan ma
 	}else{res[host]=Classic(host,cmd...)}
 	l.Debug("finished worker ",host)
 	c<-res
+	l.Info("ran: "+host+": "+strings.Join(cmd," "))
 	l.Debug("pushed to channel ",host)
 	l.Debug(res)
 }
@@ -81,7 +86,7 @@ func Mdcli(host string,cmd ...string)string{
 	return runCommandWrapper(host,mdcliEnabled,cmd...)
 }
 
-func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)map[string]string{
+func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)(map[string]string,map[string]error){
 	res:=make(map[string]string)
 	var wg sync.WaitGroup
 	c:=make(chan map[string]string)
@@ -95,5 +100,5 @@ func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)map[
 	l.Debug("waitgroup finished and channel closed, accumulating result maps")
 	for i:=range c{maps.Copy(res,i)}
 	l.Debug("result maps accumulated")
-	return res
+	return res,UnconnectableNokias
 }
