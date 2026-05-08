@@ -8,18 +8,16 @@ import (
 
 func getFileNameForHost(host string)string{return "/home/sjas/c/"+host}
 
-func CheckIfConfigsExistForAllHosts(list []string)bool{
-	for _,i:=range list{
-		fileName:=getFileNameForHost(i)
-		if _,err:=os.Stat(fileName);errors.Is(err, os.ErrNotExist){l.Fatal("missing config: "+fileName)}
-    }
-    l.Info("checked if all configs exist")
-	return true
-}
-
-func CheckIfConfigExists(host string)bool{
+func getFileNameIfConfigExists(host string)string{
 	fileName:=getFileNameForHost(host)
 	if _,err:=os.Stat(fileName);errors.Is(err, os.ErrNotExist){l.Fatal("missing config: "+fileName)}
     l.Info("checked if config exists")
-	return true
+	return fileName
+}
+
+func GetConfig(host string)string{
+	fileName:=getFileNameIfConfigExists(host)
+	b,err:=os.ReadFile(fileName);if err!=nil{l.Fatal(err)}
+	configFileString:=string(b)
+	return configFileString
 }
