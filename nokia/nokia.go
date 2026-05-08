@@ -71,11 +71,12 @@ func runCommandWorker(host string,mdcliEnabled bool,wg *sync.WaitGroup,c chan ma
 	defer wg.Done()
 	res:=make(map[string]string)
 	l.Debug("started worker ",host)
+	l.Info("\n"+host+": "+strings.Join(cmd," "))
 	if mdcliEnabled{res[host]=Mdcli(host,cmd...)
 	}else{res[host]=Classic(host,cmd...)}
 	l.Debug("finished worker ",host)
 	c<-res
-	l.Info("ran: "+host+": "+strings.Join(cmd," "))
+	l.Info("\n"+host+": DONE")
 	l.Debug("pushed to channel ",host)
 	l.Debug(res)
 }
