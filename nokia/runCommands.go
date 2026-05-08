@@ -1,6 +1,7 @@
 package nokia
 
 import (
+	"fmt"
 	"maps"
 	l "github.com/sirupsen/logrus"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"github.com/scrapli/scrapligo/driver/options"
 	"github.com/scrapli/scrapligo/platform"
 	"github.com/sjas/sjasgo/bash"
+	"github.com/sjas/sjasgo/pp"
 )
 
 var (
@@ -102,4 +104,12 @@ func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)(map
 	for i:=range c{maps.Copy(res,i)}
 	l.Debug("result maps accumulated")
 	return res,unconnectableNokias
+}
+
+func ShowUnconnectableHosts(errorMap map[string]error){
+	for k,i:=range errorMap{
+        pp.Red(k)
+		fmt.Printf(": ")
+        fmt.Println(i)
+    }
 }
