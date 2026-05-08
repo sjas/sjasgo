@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	UnconnectableNokias map[string]error
+	unconnectableNokias map[string]error=make(map[string]error)
 )
 
 func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
@@ -42,17 +42,17 @@ func runCommandWrapper(host string,mdcliEnabled bool,cmd ...string)string{
         options.WithTransportType("standard"),
 		options.WithTimeoutOps(30*time.Second),
 		options.WithChannelLog(f),
-    );if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
-    d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
-    err=d.Open();if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
+    );if err!=nil{l.Error(err);unconnectableNokias[host]=err}
+    d,err:=p.GetNetworkDriver();if err!=nil{l.Error(err);unconnectableNokias[host]=err}
+    err=d.Open();if err!=nil{l.Error(err);unconnectableNokias[host]=err}
     defer d.Close()
     //_,err=d.Channel.GetPrompt();if err!=nil{l.Error(err)}
-	if mdcliEnabled{_,err=d.Channel.SendInput("environment more false");if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
-	}else{_,err=d.Channel.SendInput("environment no more");if err!=nil{l.Error(err);UnconnectableNokias[host]=err}}
+	if mdcliEnabled{_,err=d.Channel.SendInput("environment more false");if err!=nil{l.Error(err);unconnectableNokias[host]=err}
+	}else{_,err=d.Channel.SendInput("environment no more");if err!=nil{l.Error(err);unconnectableNokias[host]=err}}
 
 	var fullResBytes []byte
 	for _,i:=range cmd{
-		resBytes,err:=d.Channel.SendInput(i);if err!=nil{l.Error(err);UnconnectableNokias[host]=err}
+		resBytes,err:=d.Channel.SendInput(i);if err!=nil{l.Error(err);unconnectableNokias[host]=err}
 		fullResBytes=append(fullResBytes,resBytes...)
 		fullResBytes=append(fullResBytes,'\n')
 		fullResBytes=append(fullResBytes,'\n')
@@ -100,5 +100,5 @@ func RunCommandOnHostList(hostlist []string,mdcliEnabled bool,cmd ...string)(map
 	l.Debug("waitgroup finished and channel closed, accumulating result maps")
 	for i:=range c{maps.Copy(res,i)}
 	l.Debug("result maps accumulated")
-	return res,UnconnectableNokias
+	return res,unconnectableNokias
 }
