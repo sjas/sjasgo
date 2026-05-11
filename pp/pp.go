@@ -18,7 +18,12 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	if showTime{inputString=inputString+" * "+time.Now().Local().Format(time.RFC3339)}
 	prettyPrint:=color.New(color.OpBold,colorfg,colorbg)
 	inputStringLength:=len(inputString)
-	terminalWidth,_,err:=term.GetSize(int(os.Stdout.Fd()));if err!=nil{l.Fatal(err)}
+	terminalWidth:=110
+	if term.IsTerminal(int(os.Stdout.Fd())){
+		w,_,err:=term.GetSize(int(os.Stdout.Fd()))
+		if err!=nil{l.Warn(err)
+		}else{terminalWidth=w}
+	}
 	res:=inputString
 	if len(fillChar)>0{res+=" "}
 	if maxCharPosition<=terminalWidth && maxCharPosition>(inputStringLength+1){
