@@ -26,9 +26,9 @@ func pph(fillChar string,colorfg color.Color,colorbg color.Color,maxCharPosition
 	}
 	res:=inputString
 	if len(fillChar)>0{res+=" "}
-	if maxCharPosition<=terminalWidth && maxCharPosition>(inputStringLength+1){
+	if maxCharPosition<=terminalWidth&&maxCharPosition>(inputStringLength+1){
 		res+=strings.Repeat(fillChar,maxCharPosition-len(inputString)-1)
-	} else
+	}else
 	if maxCharPosition>terminalWidth&&maxCharPosition>(inputStringLength+1){
 		res+=strings.Repeat(fillChar,terminalWidth-len(inputString)-1)
 	}
